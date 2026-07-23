@@ -1,0 +1,16 @@
+Company,Headquarters,State,Founded,Category,Ownership,Ticker,Valuation_or_MarketCap_USD_B,Est_2024_Revenue_USD_M,Total_Funding_USD_M,Employees,Flagship_Product
+Intuitive Surgical,Sunnyvale,CA,1995,Surgical robotics,Public,ISRG,180.0,8400,,14000,da Vinci Surgical System
+Symbotic,Wilmington,MA,2007,Warehouse automation,Public,SYM,25.0,1800,,1400,Symbotic AI-powered warehouse system
+Nuro,Mountain View,CA,2016,Autonomous delivery,Private,,8.6,50,2100,900,Nuro delivery vehicle
+Zipline,South San Francisco,CA,2014,Drone delivery,Private,,4.2,90,900,1000,Zipline P2 delivery drone
+Figure AI,Sunnyvale,CA,2022,Humanoid robots,Private,,2.6,10,754,300,Figure 02 humanoid
+Skydio,San Mateo,CA,2014,Autonomous drones,Private,,2.2,150,740,700,Skydio X10
+Locus Robotics,Wilmington,MA,2014,Warehouse AMR,Private,,2.0,200,430,800,LocusBots
+Path Robotics,Columbus,OH,2014,Welding automation,Private,,1.3,60,300,300,AI autonomous welding robot
+Boston Dynamics,Waltham,MA,1992,Mobile & humanoid robots,Private,,1.1,160,,900,Spot / Atlas
+Agility Robotics,Corvallis,OR,2015,Humanoid robots,Private,,1.0,20,180,200,Digit humanoid
+Bright Machines,San Francisco,CA,2018,Manufacturing automation,Private,,0.9,120,435,400,Microfactories
+Bear Robotics,Redwood City,CA,2017,Service robots,Private,,0.5,80,150,200,Servi delivery robot
+iRobot,Bedford,MA,1990,Consumer robots,Public,IRBT,0.3,890,,1100,Roomba
+Diligent Robotics,Austin,TX,2017,Healthcare robots,Private,,0.3,15,90,120,Moxi hospital assistant
+Carbon Robotics,Seattle,WA,2018,Agricultural robots,Private,,0.4,70,157,200,LaserWeeder
