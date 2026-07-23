@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Most Successful US Robotics Companies (2025)</title>
+<style>
+  .viz-root {
+    color-scheme: light;
+    --surface-1:      #fcfcfb;
+    --page:           #f9f9f7;
+    --text-primary:   #0b0b0b;
+    --text-secondary: #52514e;
+    --muted:          #898781;
+    --grid:           #e1e0d9;
+    --baseline:       #c3c2b7;
+    --series-1:       #2a78d6;
+    --border:         rgba(11,11,11,0.10);
+    --tooltip-bg:     #0b0b0b;
+    --tooltip-ink:    #fcfcfb;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:where(:not([data-theme="light"])) .viz-root {
+      color-scheme: dark;
+      --surface-1:      #1a1a19;
+      --page:           #0d0d0d;
+      --text-primary:   #ffffff;
+      --text-secondary: #c3c2b7;
+      --muted:          #898781;
+      --grid:           #2c2c2a;
+      --baseline:       #383835;
+      --series-1:       #3987e5;
+      --border:         rgba(255,255,255,0.10);
+      --tooltip-bg:     #ffffff;
+      --tooltip-ink:    #1a1a19;
+    }
+  }
+  :root[data-theme="dark"] .viz-root {
+    color-scheme: dark;
+    --surface-1:      #1a1a19;
+    --page:           #0d0d0d;
+    --text-primary:   #ffffff;
+    --text-secondary: #c3c2b7;
+    --muted:          #898781;
+    --grid:           #2c2c2a;
+    --baseline:       #383835;
+    --series-1:       #3987e5;
+    --border:         rgba(255,255,255,0.10);
+    --tooltip-bg:     #ffffff;
+    --tooltip-ink:    #1a1a19;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page, #f9f9f7);
+    font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  .viz-root {
+    background: var(--page);
+    color: var(--text-primary);
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px 40px;
+  }
+  .card {
+    background: var(--surface-1);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 28px 20px;
+  }
+  h1 {
+    font-size: 22px;
+    line-height: 1.25;
+    margin: 0 0 4px;
+    letter-spacing: -0.01em;
+  }
+  .subtitle {
+    font-size: 14px;
+    color: var(--text-secondary);
+    margin: 0 0 20px;
+  }
+  .toolbar {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 18px;
+  }
+  .toolbar button {
+    font: inherit;
+    font-size: 13px;
+    color: var(--text-secondary);
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 5px 14px;
+    cursor: pointer;
+  }
+  .toolbar button[aria-pressed="true"] {
+    color: var(--text-primary);
+    border-color: var(--baseline);
+    background: color-mix(in srgb, var(--series-1) 10%, transparent);
+  }
+
+  /* chart */
+  .chart { display: grid; row-gap: 2px; }
+  .row {
+    display: grid;
+    grid-template-columns: 128px 1fr;
+    align-items: center;
+    column-gap: 12px;
+    cursor: default;
+  }
+  .row .name {
+    font-size: 12.5px;
+    color: var(--text-secondary);
+    text-align: right;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .track {
+    position: relative;
+    height: 22px;
+    display: flex;
+    align-items: center;
+  }
+  .bar {
+    height: 100%;
+    background: var(--series-1);
+    border-radius: 0 4px 4px 0;
+    min-width: 2px;
+    transition: filter .12s ease;
+  }
+  .row:hover .bar { filter: brightness(1.08); }
+  .val {
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-left: 8px;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+  }
+  .axis {
+    grid-template-columns: 128px 1fr;
+    display: grid;
+    column-gap: 12px;
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--grid);
+  }
+  .axis .ticks {
+    display: flex;
+    justify-content: space-between;
+    font-size: 11px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  /* tooltip */
+  .tip {
+    position: fixed;
+    z-index: 20;
+    pointer-events: none;
+    background: var(--tooltip-bg);
+    color: var(--tooltip-ink);
+    border-radius: 8px;
+    padding: 10px 12px;
+    font-size: 12px;
+    line-height: 1.5;
+    max-width: 240px;
+    opacity: 0;
+    transition: opacity .1s ease;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.25);
+  }
+  .tip.show { opacity: 1; }
+  .tip .t-name { font-weight: 600; font-size: 13px; margin-bottom: 2px; }
+  .tip .t-row { display: flex; justify-content: space-between; gap: 16px; }
+  .tip .t-k { opacity: .7; }
+
+  /* table */
+  .table-wrap { overflow-x: auto; margin-top: 6px; }
+  table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+  th, td {
+    text-align: left;
+    padding: 7px 10px;
+    border-bottom: 1px solid var(--grid);
+    white-space: nowrap;
+  }
+  th { color: var(--muted); font-weight: 600; }
+  td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; }
+  [hidden] { display: none !important; }
+
+  footer {
+    font-size: 11.5px;
+    color: var(--muted);
+    margin-top: 16px;
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="viz-root">
+  <div class="card">
+    <h1>Most Successful US Robotics Companies</h1>
+    <p class="subtitle">Ranked by valuation or market cap, USD billions &middot; 2025</p>
+
+    <div class="toolbar" role="group" aria-label="View">
+      <button id="btn-chart" aria-pressed="true">Chart</button>
+      <button id="btn-table" aria-pressed="false">Table</button>
+    </div>
+
+    <div id="chart-view">
+      <div class="chart" id="chart"></div>
+      <div class="axis">
+        <div></div>
+        <div class="ticks" id="ticks"></div>
+      </div>
+    </div>
+
+    <div id="table-view" hidden></div>
+
+    <footer>
+      Figures are approximate and illustrative, compiled for a data-viz practice
+      project. Private-company valuations and revenue shift frequently and are not
+      always disclosed. Verify against primary sources before use.
+    </footer>
+  </div>
+</div>
+
+<div class="tip" id="tip" role="status"></div>
+
+<script>
+  const data = [
+    { name: "Intuitive Surgical", val: 180.0, cat: "Surgical robotics",      hq: "Sunnyvale, CA",          own: "Public (ISRG)",  rev: 8400, emp: 14000, prod: "da Vinci Surgical System" },
+    { name: "Symbotic",           val: 25.0,  cat: "Warehouse automation",   hq: "Wilmington, MA",         own: "Public (SYM)",   rev: 1800, emp: 1400,  prod: "AI-powered warehouse system" },
+    { name: "Nuro",               val: 8.6,   cat: "Autonomous delivery",    hq: "Mountain View, CA",      own: "Private",        rev: 50,   emp: 900,   prod: "Nuro delivery vehicle" },
+    { name: "Zipline",            val: 4.2,   cat: "Drone delivery",         hq: "South San Francisco, CA",own: "Private",        rev: 90,   emp: 1000,  prod: "Zipline P2 drone" },
+    { name: "Figure AI",          val: 2.6,   cat: "Humanoid robots",        hq: "Sunnyvale, CA",          own: "Private",        rev: 10,   emp: 300,   prod: "Figure 02 humanoid" },
+    { name: "Skydio",             val: 2.2,   cat: "Autonomous drones",      hq: "San Mateo, CA",          own: "Private",        rev: 150,  emp: 700,   prod: "Skydio X10" },
+    { name: "Locus Robotics",     val: 2.0,   cat: "Warehouse AMR",          hq: "Wilmington, MA",         own: "Private",        rev: 200,  emp: 800,   prod: "LocusBots" },
+    { name: "Path Robotics",      val: 1.3,   cat: "Welding automation",     hq: "Columbus, OH",           own: "Private",        rev: 60,   emp: 300,   prod: "Autonomous welding robot" },
+    { name: "Boston Dynamics",    val: 1.1,   cat: "Mobile & humanoid",      hq: "Waltham, MA",            own: "Private",        rev: 160,  emp: 900,   prod: "Spot / Atlas" },
+    { name: "Agility Robotics",   val: 1.0,   cat: "Humanoid robots",        hq: "Corvallis, OR",          own: "Private",        rev: 20,   emp: 200,   prod: "Digit humanoid" },
+    { name: "Bright Machines",    val: 0.9,   cat: "Manufacturing",          hq: "San Francisco, CA",      own: "Private",        rev: 120,  emp: 400,   prod: "Microfactories" },
+    { name: "Bear Robotics",      val: 0.5,   cat: "Service robots",         hq: "Redwood City, CA",       own: "Private",        rev: 80,   emp: 200,   prod: "Servi delivery robot" },
+    { name: "Carbon Robotics",    val: 0.4,   cat: "Agricultural robots",    hq: "Seattle, WA",            own: "Private",        rev: 70,   emp: 200,   prod: "LaserWeeder" },
+    { name: "iRobot",             val: 0.3,   cat: "Consumer robots",        hq: "Bedford, MA",            own: "Public (IRBT)",  rev: 890,  emp: 1100,  prod: "Roomba" },
+    { name: "Diligent Robotics",  val: 0.3,   cat: "Healthcare robots",      hq: "Austin, TX",             own: "Private",        rev: 15,   emp: 120,   prod: "Moxi hospital assistant" }
+  ];
+
+  const max = Math.max(...data.map(d => d.val));
+  const fmtB = v => "$" + (v >= 10 ? v.toFixed(0) : v.toFixed(1)) + "B";
+  const fmtM = v => "$" + v.toLocaleString() + "M";
+  const fmtN = v => v.toLocaleString();
+
+  // ---- chart ----
+  const chart = document.getElementById("chart");
+  data.forEach(d => {
+    const row = document.createElement("div");
+    row.className = "row";
+    row.innerHTML =
+      '<div class="name" title="' + d.name + '">' + d.name + '</div>' +
+      '<div class="track">' +
+        '<div class="bar" style="width:' + (d.val / max * 100) + '%"></div>' +
+        '<span class="val">' + fmtB(d.val) + '</span>' +
+      '</div>';
+    bindTip(row, d);
+    chart.appendChild(row);
+  });
+
+  // axis ticks (linear 0..180)
+  const ticks = document.getElementById("ticks");
+  [0, 45, 90, 135, 180].forEach(t => {
+    const s = document.createElement("span");
+    s.textContent = "$" + t + "B";
+    ticks.appendChild(s);
+  });
+
+  // ---- tooltip ----
+  const tip = document.getElementById("tip");
+  function bindTip(el, d) {
+    const html =
+      '<div class="t-name">' + d.name + '</div>' +
+      '<div class="t-row"><span class="t-k">Category</span><span>' + d.cat + '</span></div>' +
+      '<div class="t-row"><span class="t-k">HQ</span><span>' + d.hq + '</span></div>' +
+      '<div class="t-row"><span class="t-k">Ownership</span><span>' + d.own + '</span></div>' +
+      '<div class="t-row"><span class="t-k">Valuation</span><span>' + fmtB(d.val) + '</span></div>' +
+      '<div class="t-row"><span class="t-k">Est. revenue</span><span>' + fmtM(d.rev) + '</span></div>' +
+      '<div class="t-row"><span class="t-k">Employees</span><span>' + fmtN(d.emp) + '</span></div>' +
+      '<div class="t-row"><span class="t-k">Flagship</span><span>' + d.prod + '</span></div>';
+    el.addEventListener("mouseenter", () => { tip.innerHTML = html; tip.classList.add("show"); });
+    el.addEventListener("mousemove", e => {
+      const pad = 14;
+      let x = e.clientX + pad, y = e.clientY + pad;
+      const r = tip.getBoundingClientRect();
+      if (x + r.width > innerWidth)  x = e.clientX - r.width - pad;
+      if (y + r.height > innerHeight) y = e.clientY - r.height - pad;
+      tip.style.left = x + "px"; tip.style.top = y + "px";
+    });
+    el.addEventListener("mouseleave", () => tip.classList.remove("show"));
+  }
+
+  // ---- table ----
+  const tv = document.getElementById("table-view");
+  let thead = '<thead><tr>' +
+    '<th>Company</th><th>Category</th><th>HQ</th><th>Ownership</th>' +
+    '<th class="num">Valuation</th><th class="num">Revenue</th><th class="num">Employees</th>' +
+    '</tr></thead>';
+  let tbody = '<tbody>' + data.map(d =>
+    '<tr><td>' + d.name + '</td><td>' + d.cat + '</td><td>' + d.hq + '</td><td>' + d.own + '</td>' +
+    '<td class="num">' + fmtB(d.val) + '</td><td class="num">' + fmtM(d.rev) + '</td>' +
+    '<td class="num">' + fmtN(d.emp) + '</td></tr>'
+  ).join('') + '</tbody>';
+  tv.innerHTML = '<div class="table-wrap"><table>' + thead + tbody + '</table></div>';
+
+  // ---- toggle ----
+  const bC = document.getElementById("btn-chart"), bT = document.getElementById("btn-table");
+  const vC = document.getElementById("chart-view"), vT = document.getElementById("table-view");
+  bC.onclick = () => { vC.hidden = false; vT.hidden = true;  bC.setAttribute("aria-pressed","true");  bT.setAttribute("aria-pressed","false"); };
+  bT.onclick = () => { vC.hidden = true;  vT.hidden = false; bC.setAttribute("aria-pressed","false"); bT.setAttribute("aria-pressed","true"); };
+</script>
+</body>
+</html>
